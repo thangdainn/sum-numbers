@@ -18,43 +18,33 @@ public class MyBigNumber {
             int digit1 = i >= 0 ? a.charAt(i--) - '0' : 0;
             int digit2 = j >= 0 ? b.charAt(j--) - '0' : 0;
 
-            int sumWithoutCarry = digit1 + digit2;
-            int totalSum = sumWithoutCarry + carry;
-            int digit = totalSum % 10;
-            int newCarry = totalSum / 10;
-            result.append(digit);
+            int total = digit1 + digit2 + carry;
+            result.append(total % 10);
 
-            StringBuilder msg = new StringBuilder();
-            msg.append("Step ").append(step).append(": Take ")
-                    .append(digit1).append(" plus ").append(digit2)
-                    .append(" equals ").append(sumWithoutCarry).append(". ");
-
-            if (carry > 0) {
-                msg.append("Plus and carry over ").append(carry)
-                        .append(" equals ").append(totalSum).append(" ");
-            }
-
-            msg.append("Save ").append(digit).append(" to result");
-
-            if (newCarry > 0) {
-                msg.append(" and carry over ").append(newCarry);
-            }
-
-            logger.info(msg.toString());
-
-            carry = newCarry;
-            step++;
+            log(step++, digit1, digit2, carry, total);
+            carry = total / 10;
         }
 
-        String sumResult = result.reverse().toString();
+        return result.length() == 0 ? "0" : stripLeadingZeros(result.reverse().toString());
+    }
 
-        if (sumResult.isEmpty()) {
-            return "0";
-        }
+    private static String stripLeadingZeros(String s) {
         int start = 0;
-        while (start < sumResult.length() - 1 && sumResult.charAt(start) == '0') {
-            start++;
-        }
-        return sumResult.substring(start);
+        while (start < s.length() - 1 && s.charAt(start) == '0') start++;
+        return s.substring(start);
+    }
+
+    private static void log(int step, int d1, int d2, int carry, int total) {
+        StringBuilder msg = new StringBuilder(64)
+                .append("Step ").append(step).append(": ")
+                .append(d1).append(" + ").append(d2);
+
+        if (carry > 0) msg.append(" + carry ").append(carry);
+        msg.append(" = ").append(total % 10);
+
+        carry = total / 10;
+        if (carry > 0) msg.append(", carry ").append(carry);
+
+        logger.info(msg.toString());
     }
 }

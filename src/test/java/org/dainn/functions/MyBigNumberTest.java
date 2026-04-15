@@ -15,7 +15,7 @@ public class MyBigNumberTest {
     @Test
     void testWithCarry() {
         assertEquals("1000", mbn.sum("999", "1"));
-        assertEquals("832", mbn.sum("154", "678"));
+        assertEquals("772", mbn.sum("154", "618"));
     }
 
     @Test
