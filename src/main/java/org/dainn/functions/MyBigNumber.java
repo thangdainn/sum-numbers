@@ -1,9 +1,12 @@
 package org.dainn.functions;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class MyBigNumber {
     private static final Logger logger = Logger.getLogger(MyBigNumber.class.getName());
+    public List<String> steps = new ArrayList<>();
 
     public String sum(String a, String b) {
         if(a == null) a = "0";
@@ -21,11 +24,15 @@ public class MyBigNumber {
             int total = digit1 + digit2 + carry;
             result.append(total % 10);
 
-            log(step++, digit1, digit2, carry, total);
+            steps.add(log(step++, digit1, digit2, carry, total));
             carry = total / 10;
         }
 
         return result.length() == 0 ? "0" : stripLeadingZeros(result.reverse().toString());
+    }
+
+    public SumResult sumWithSteps(String a, String b) {
+        return new SumResult(sum(a, b), steps);
     }
 
     private static String stripLeadingZeros(String s) {
@@ -34,17 +41,18 @@ public class MyBigNumber {
         return s.substring(start);
     }
 
-    private static void log(int step, int d1, int d2, int carry, int total) {
+    private static String log(int step, int d1, int d2, int carry, int total) {
         StringBuilder msg = new StringBuilder(64)
                 .append("Step ").append(step).append(": ")
                 .append(d1).append(" + ").append(d2);
 
         if (carry > 0) msg.append(" + carry ").append(carry);
-        msg.append(" = ").append(total % 10);
+        msg.append(" = ").append(total);
 
         carry = total / 10;
-        if (carry > 0) msg.append(", carry ").append(carry);
+        if (carry > 0) msg.append(", get ").append(total % 10).append(" carry ").append(carry);
 
         logger.info(msg.toString());
+        return msg.toString();
     }
 }

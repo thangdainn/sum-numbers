@@ -6,7 +6,7 @@
 
   <groupId>org.dainn</groupId>
   <artifactId>sum-numbers</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1</version>
   <packaging>jar</packaging>
 
   <name>sum-numbers</name>
